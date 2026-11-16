@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>여행틈 강릉 공방 여행</title>
+<meta name="description" content="여행 사이 남는 시간에 들르기 좋은 강릉의 공방과 동네 상점을 소개합니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="logo-dot" aria-hidden="true"></span>여행틈</a>
+    <nav class="nav" aria-label="주요 메뉴">
+      <a href="#ai">틈새 추천</a>
+      <a href="#shops">공방·상점</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <!-- 1. 메인 -->
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="hand">기차 시간까지, 딱 그만큼의 강릉</span>
+        <h1 aria-label="여행틈"><span class="t">여행</span><span class="slot" aria-hidden="true"><img src="images/icons/cafe.svg" alt=""></span><span class="t">틈</span></h1>
+        <p class="lead">여행 사이사이 남는 한두 시간, 그 틈에 들르기 좋은 강릉의 작은 책방과 소품샵, 공방과 카페를 모았어요. 감자 굿즈를 구경하고, LP를 골라 듣고, 다락방에서 영화 한 편을 만나 보세요.</p>
+        <div class="hero-cta">
+          <a class="btn btn-main" href="#ai">남는 시간 알려주기</a>
+          <a class="btn btn-sub" href="#shops">가게 둘러보기</a>
+        </div>
+        <div class="gap-strip play" id="gapStrip" aria-label="일정과 일정 사이에 남는 시간을 동네 가게로 채우는 모습">
+          <div class="gs-end"><span id="gsA1">13:10</span><small id="gsA2">강릉 도착</small></div>
+          <div class="gs-mid">
+            <span class="gs-label" id="gsLabel">3시간의 틈</span>
+            <img src="images/icons/book.svg" alt="">
+            <img src="images/icons/culture.svg" alt="">
+            <img src="images/icons/goods.svg" alt="">
+          </div>
+          <div class="gs-end"><span id="gsB1">16:10</span><small id="gsB2">기차 출발</small></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <img src="images/hero.svg" alt="강릉 바다와 소나무, 작은 공방들이 있는 그림" width="600" height="440">
+      </div>
+    </div>
+  </div>
+
+  <!-- AI 틈새 추천 -->
+  <section id="ai">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>틈새 추천</h2>
+        <p>지금 어디에 있고 시간이 얼마나 남았는지 편하게 말해 주세요. 이동 시간과 돌아오는 시간까지 넣어 코스를 짜 드려요.</p>
+      </div>
+      <div class="ai">
+        <form class="ai-form" id="aiForm">
+          <input id="aiInput" type="text" autocomplete="off" aria-label="남는 시간과 현재 위치를 입력하세요" placeholder="예) 시간 3시간 남고 지금 강릉역 앞인데 할 만한 거 추천해줘">
+          <button class="btn btn-main" type="submit">추천받기</button>
+        </form>
+        <div class="chips" id="aiChips"></div>
+        <div class="ai-out" id="aiOut" aria-live="polite"></div>
+        <p class="note">시제품이라 실제 AI 대신 간단한 규칙으로 답해요. 이동 시간은 어림값이고, 휴무일은 따로 확인하지 않아요.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2~4. 공방 목록 -->
+  <section id="shops">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>동네 가게와 작은 공간</h2>
+        <p>종류와 동네를 골라 찾아보세요. 카드를 누르면 자세한 정보를 볼 수 있어요.</p>
+      </div>
+      <div class="filters">
+        <div class="cat-row" id="catRow" role="group" aria-label="종류로 고르기"></div>
+        <div class="with-row" id="withRow" role="group" aria-label="함께 가는 사람으로 고르기"></div>
+        <div class="find-row">
+          <div class="field">
+            <label for="regionSel">지역</label>
+            <select id="regionSel"></select>
+          </div>
+          <div class="field">
+            <label for="kw">이름·키워드</label>
+            <input id="kw" type="search" placeholder="예) 감자, 엽서, 한옥">
+          </div>
+          <span class="count" id="count"></span>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>여행틈</b>
+    강릉의 작은 가게를 잇는 로컬 여행 안내소<br>
+    이 페이지는 시제품입니다. 운영 시간과 가격은 바뀔 수 있으니 방문 전에 꼭 확인해 주세요.
+  </div>
+</footer>
+
+<dialog id="detail" aria-labelledby="dName"></dialog>
+
+<!-- 1) 데이터  2) 기능  3) 시작 순서로 불러옵니다. 순서를 바꾸면 작동하지 않아요. -->
+<script src="data/categories.js"></script>
+<script src="data/regions.js"></script>
+<script src="data/shops.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/shops.js"></script>
+<script src="js/recommend.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
