@@ -26,7 +26,8 @@ yeohaengteum/
 │   ├── utils.js          여러 곳에서 쓰는 작은 도구 (이동 시간 계산, 시간 표시 등)
 │   ├── shops.js          가게 목록, 필터, 상세 창
 │   ├── recommend.js      틈새 추천 (문장 읽기 → 코스 짜기 → 답변 표시)
-│   └── main.js           버튼·입력창에 동작 연결, 메인 화면 연출, 첫 화면 그리기
+│   ├── main.js           버튼·입력창에 동작 연결, 메인 화면 연출, 첫 화면 그리기
+│   └── config.js         AI 서버 주소(AI_URL)를 적는 곳
 ├── data/
 │   ├── categories.js     가게 종류(도자기, 향수 …)와 동행 조건
 │   ├── regions.js        지역 목록과 대략적인 위치
@@ -35,6 +36,8 @@ yeohaengteum/
 │   ├── hero.svg          메인 화면 그림 (기차·구름 움직임 포함)
 │   ├── icons/            종류별 아이콘
 │   └── shops/            가게 사진을 넣는 폴더 (지금은 비어 있음)
+├── cloudflare-worker/
+│   └── worker.js         Cloudflare에 붙여 넣는 AI 추천 서버 코드
 └── .vscode/
     └── extensions.json   VS Code가 Live Server 설치를 권하도록 하는 설정
 ```
@@ -75,7 +78,7 @@ yeohaengteum/
 
 ## 알아 둘 점
 
-- **추천은 실제 AI가 아닙니다.** 문장에 정해진 단어가 있는지 찾는 규칙입니다. (`js/recommend.js`)
+- **AI 추천은 `js/config.js`에 주소를 넣어야 켜집니다.** 비어 있거나 AI가 답하지 못하면 문장 속 단어를 찾는 간단한 규칙으로 추천합니다.
 - **이동 시간은 어림값입니다.** `data/regions.js`의 대략적인 위치로 계산합니다. (`js/utils.js`의 `travel`)
 - **여는 시간은 글자로만 보여 줍니다.** 지금 영업 중인지는 확인하지 않습니다.
 - `index.html` 아래쪽의 `<script>` 순서(데이터 → 기능 → 시작)를 바꾸면 작동하지 않습니다.
@@ -88,3 +91,15 @@ yeohaengteum/
 3. 가게 정보를 데이터베이스로 옮기고 관리자 화면 만들기
 4. 서버를 두고 실제 AI 연결하기 (`js/recommend.js`의 `answer`를 교체)
 5. 호스팅과 도메인을 마련해 공개하기
+
+## AI 추천 켜기 (Cloudflare 무료)
+
+1. cloudflare.com 에 무료로 가입합니다.
+2. **Workers & Pages → Create application → Start with Hello World! → Get started**, 이름을 `yeohaengteum-ai`로 정하고 **Deploy**.
+3. **Edit code**를 눌러 안의 코드를 모두 지우고 `cloudflare-worker/worker.js` 내용을 붙여 넣은 뒤 **Deploy**.
+   붙여 넣기 전에 맨 위 `ALLOWED_ORIGINS`의 주소를 내 홈페이지 주소 앞부분으로 고칩니다.
+4. Worker 화면의 **Bindings(바인딩) → Add binding → Workers AI**, 변수 이름(Variable name)을 `AI`로 적고 저장·배포합니다.
+5. Worker 주소(`https://yeohaengteum-ai.○○○.workers.dev`)를 브라우저로 열어 `"ok":true`, `"ai":true`가 보이는지 확인합니다.
+6. `js/config.js`의 `AI_URL`에 그 주소를 넣고 GitHub에 다시 올립니다.
+
+무료 한도: Cloudflare Workers AI는 하루 10,000 뉴런까지 무료입니다. 한도를 넘으면 그날은 AI가 멈추고 간단 추천으로 바뀝니다. 유료 요금제에 가입하지 않는 한 요금은 나가지 않습니다.
