@@ -21,3 +21,7 @@ function travel(a,b){ // 분 단위 어림값
 function moveText(a,b){return (isWalk(a,b)?"걸어서":"차로")+" 약 "+travel(a,b)+"분";}
 function fmt(min){var h=Math.floor(min/60),m=min%60;return (h?h+"시간":"")+(h&&m?" ":"")+(m||!h?m+"분":"");}
 function clock(min){var h=Math.floor(min/60),m=min%60;return "+"+h+":"+(m<10?"0":"")+m;}
+
+/* 네이버 지도 검색 주소 만들기 (키 없이 누구나 열 수 있어요) */
+function mapQuery(s){return s.map||(s.name.indexOf("강릉")>=0?s.name:"강릉 "+s.name);}
+function mapUrl(s){return "https://map.naver.com/p/search/"+encodeURIComponent(mapQuery(s));}

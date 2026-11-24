@@ -56,9 +56,10 @@ function openDetail(id){
     '<div><dt>걸리는 시간</dt><dd>약 '+fmt(s.dur)+'</dd></div>'+
     '<div><dt>가격</dt><dd>'+esc(s.price)+'</dd></div>'+
     '<div><dt>여는 시간</dt><dd>'+esc(s.hours)+'</dd></div>'+
-    '<div><dt>강릉역에서</dt><dd>'+moveText("station",s.region)+'</dd></div>'+
+    '<div><dt>강릉역에서</dt><dd>'+esc(s.station||moveText("station",s.region))+'</dd></div>'+
     '<div style="grid-column:1/-1"><dt>주소</dt><dd>'+esc(s.addr)+'</dd></div>'+
     '<div style="grid-column:1/-1"><dt>함께 가기</dt><dd>'+esc(s.acc)+'</dd>'+withPills(s)+'</div></dl>'+
+    '<a class="btn btn-main map-btn" href="'+mapUrl(s)+'" target="_blank" rel="noopener">네이버 지도에서 보기</a>'+
     '<div class="tags">'+s.tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join("")+'</div>'+
     '<p class="note">운영 시간과 가격은 바뀔 수 있어요. 방문 전에 확인해 주세요.</p></div>';
   if(dlg.open) dlg.close();

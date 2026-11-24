@@ -113,14 +113,14 @@ function render(q,ai,warn){
   } else if(!plan.stops.length){
     var near=pool.slice().sort(function(a,b){return (travel(start,a.region)+a.dur)-(travel(start,b.region)+b.dur);})[0];
     html='<h3>'+fmt(budget)+'은 조금 빠듯해요</h3><p>'+R+'에서 가장 짧게 들를 수 있는 곳은 여기예요. 이동까지 넣으면 약 '+fmt((travel(start,near.region)+mode.extra)*2+near.dur)+'이 필요해요.</p>'+
-      '<ol class="plan"><li><span class="when">가까운 곳</span><div>'+stopBtn(near,'')+'</div></li></ol>';
+      '<ol class="plan"><li><span class="when">가까운 곳</span><div>'+stopBtn(near,'')+'<a class="maplink" href="'+mapUrl(near)+'" target="_blank" rel="noopener">네이버 지도 ↗</a></div></li></ol>';
   } else {
     var spare=budget-plan.total;
     html='<h3>'+(ai?'<span class="ai-badge">AI 추천</span>':'')+(who?who+', ':'')+R+'에서 '+fmt(budget)+'</h3>'+(ai&&ai.message?'<p class="ai-msg">'+esc(ai.message)+'</p>':'')+'<p>'+(p.cats.length?p.cats.map(function(c){return CATS[c].name;}).join("·")+" 위주로 골랐어요. ":"")+
       '모두 '+plan.stops.length+'곳, 돌아오는 시간까지 약 '+fmt(plan.total)+'이에요.</p>';
     html+='<ol class="plan">'+
       plan.stops.map(function(st){
-        return '<li><span class="when">'+clock(st.arrive)+'</span><div><div class="move">'+st.move+' 이동</div>'+stopBtn(st.shop,' · 약 '+fmt(st.shop.dur))+'</div></li>';
+        return '<li><span class="when">'+clock(st.arrive)+'</span><div><div class="move">'+st.move+' 이동</div>'+stopBtn(st.shop,' · 약 '+fmt(st.shop.dur))+'<a class="maplink" href="'+mapUrl(st.shop)+'" target="_blank" rel="noopener">네이버 지도 ↗</a></div></li>';
       }).join("")+
       '<li><span class="when">'+clock(plan.total)+'</span><div><div class="move">'+plan.backText+' 이동</div>'+R+' 도착'+(spare>0?' · 여유 '+fmt(spare):'')+'</div></li></ol>';
   }
