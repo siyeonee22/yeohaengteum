@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 440">
+  <!-- 기차와 구름의 움직임 -->
+  <style>
+    .train{transform:translateX(60px);animation:train 12s linear infinite}
+    @keyframes train{from{transform:translateX(-200px)}to{transform:translateX(620px)}}
+    .cloud{animation:drift 7s ease-in-out infinite alternate}
+    .cloud.c2{animation-duration:9s}
+    @keyframes drift{from{transform:translateX(-8px)}to{transform:translateX(16px)}}
+    @media (prefers-reduced-motion:reduce){.train,.cloud{animation:none}}
+  </style>
+  <rect width="600" height="440" fill="#D6ECF7"/>
+  <circle cx="470" cy="96" r="46" fill="#FFE7A6"/>
+  <g fill="#fff" class="cloud"><ellipse cx="120" cy="80" rx="54" ry="22"/><ellipse cx="160" cy="66" rx="36" ry="20"/></g>
+  <g fill="#fff" class="cloud c2"><ellipse cx="330" cy="120" rx="44" ry="17"/><ellipse cx="362" cy="108" rx="28" ry="15"/></g>
+  <path d="M0 230c60-18 120 14 200 0s140-20 220-4 120 10 180-2v216H0z" fill="#B5E2D8"/>
+  <path d="M0 262c50-10 90 10 150 2s110-12 170 0 150 8 280-6" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity=".8"/>
+  <path d="M0 330c90-34 210-30 310-10s200 6 290-18v138H0z" fill="#FFF1D9"/>
+  <!-- 소나무 -->
+  <g><rect x="62" y="270" width="10" height="70" rx="4" fill="#A9806A"/><ellipse cx="67" cy="256" rx="38" ry="30" fill="#8FCBB2"/><ellipse cx="88" cy="276" rx="24" ry="18" fill="#A3D8C2"/></g>
+  <g><rect x="532" y="262" width="9" height="60" rx="4" fill="#A9806A"/><ellipse cx="536" cy="250" rx="32" ry="26" fill="#8FCBB2"/></g>
+  <!-- 공방 -->
+  <g><rect x="140" y="300" width="100" height="84" rx="10" fill="#FFC2AD"/><path d="M130 304l60-46 60 46z" fill="#F4977D"/><rect x="176" y="336" width="28" height="48" rx="8" fill="#fff"/><circle cx="222" cy="330" r="9" fill="#fff"/></g>
+  <g><rect x="262" y="286" width="118" height="98" rx="10" fill="#fff"/><path d="M252 290h138l-14-34H266z" fill="#FFE7A6"/><rect x="280" y="310" width="34" height="30" rx="6" fill="#D6ECF7"/><rect x="330" y="322" width="30" height="62" rx="8" fill="#B5E2D8"/></g>
+  <g><rect x="400" y="310" width="92" height="74" rx="10" fill="#B5E2D8"/><path d="M392 314l54-40 54 40z" fill="#7CC3B3"/><rect x="418" y="332" width="26" height="24" rx="6" fill="#fff"/><rect x="456" y="340" width="22" height="44" rx="7" fill="#FFF1D9"/></g>
+  <path d="M0 384h600v56H0z" fill="#FFE3C4"/>
+  <path d="M0 424h600" stroke="#59443A" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round" opacity=".45"/>
+  <g class="train">
+    <rect x="0" y="394" width="54" height="26" rx="8" fill="#fff"/><rect x="58" y="394" width="54" height="26" rx="8" fill="#fff"/>
+    <path d="M116 402a8 8 0 018-8h30c14 0 24 12 24 26h-62z" fill="#F4977D"/>
+    <g fill="#D6ECF7"><rect x="8" y="400" width="14" height="9" rx="3"/><rect x="30" y="400" width="14" height="9" rx="3"/><rect x="66" y="400" width="14" height="9" rx="3"/><rect x="88" y="400" width="14" height="9" rx="3"/><rect x="126" y="400" width="14" height="9" rx="3"/><path d="M148 400h8c6 0 10 4 12 9h-20z"/></g>
+  </g>
+</svg>
