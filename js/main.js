@@ -7,6 +7,8 @@ $("aiForm").addEventListener("submit",function(e){e.preventDefault(); var q=$("a
 $("aiOut").addEventListener("click",function(e){var b=e.target.closest("[data-id]"); if(b) openDetail(b.dataset.id);});
 $("catRow").addEventListener("click",function(e){var b=e.target.closest("[data-cat]"); if(b) setCat(b.dataset.cat);});
 $("regionSel").addEventListener("change",function(e){state.region=e.target.value; renderGrid();});
+$("startSel").addEventListener("change",function(e){state.start=e.target.value; renderGrid();});
+$("sortSel").addEventListener("change",function(e){state.sort=e.target.value; renderGrid();});
 $("kw").addEventListener("input",function(e){state.kw=e.target.value; renderGrid();});
 $("grid").addEventListener("click",function(e){
   if(e.target.closest("#resetBtn")){state.region="all";state.kw="";state.withs={};

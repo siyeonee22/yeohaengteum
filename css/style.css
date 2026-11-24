@@ -145,6 +145,7 @@ section{padding:44px 0}
 .dots i{width:8px;height:8px;border-radius:50%;background:var(--peach-deep);animation:dot 1s ease-in-out infinite}
 .dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
 @keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+.card .from{font-size:13.5px;color:var(--cocoa);font-family:var(--font-display)}
 /* 네이버 지도 */
 .map-btn{align-self:flex-start;background:#03C75A;color:#fff;box-shadow:0 4px 0 #02a24a}
 .maplink{display:inline-block;margin-top:6px;font-size:14px;font-family:var(--font-display);color:#02904a;text-decoration:none}

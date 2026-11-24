@@ -1,6 +1,6 @@
 /* 여행틈 — 가게 목록, 필터(종류·지역·동행·키워드), 상세 창 */
 /* ---------- 목록 + 필터 ---------- */
-var state={cat:"all",region:"all",kw:"",withs:{}};
+var state={cat:"all",region:"all",kw:"",withs:{},start:"station",sort:"base"};
 function renderCats(){
   $("withRow").innerHTML='<span>함께 가는 사람</span>'+Object.keys(WITH).map(function(k){return '<button class="wbtn" type="button" data-with="'+k+'" aria-pressed="false">'+WITH[k]+'</button>';}).join("");
   var html='<button class="cat" type="button" data-cat="all" aria-pressed="true" style="padding-left:16px">전체</button>';
@@ -11,6 +11,12 @@ function renderCats(){
   var opt='<option value="all">강릉 전체</option>';
   Object.keys(REGIONS).filter(function(k){return SHOPS.some(function(x){return x.region===k;});}).forEach(function(k){opt+='<option value="'+k+'">'+REGIONS[k].name+'</option>';});
   $("regionSel").innerHTML=opt;
+  /* 출발지: 자주 가는 곳 + 강릉 읍·면·동 */
+  var so='<optgroup label="자주 가는 곳">';
+  ["station","market","gyodong","anmok","chodang","gyeongpo","ojuk","jumunjin"].forEach(function(k){so+='<option value="'+k+'">'+REGIONS[k].name+'</option>';});
+  so+='</optgroup><optgroup label="강릉 읍·면·동">';
+  Object.keys(STARTS).forEach(function(k){so+='<option value="'+k+'">'+STARTS[k].name+'</option>';});
+  $("startSel").innerHTML=so+'</optgroup>';
 }
 function renderGrid(){
   var kw=state.kw.trim().toLowerCase();
@@ -24,6 +30,7 @@ function renderGrid(){
     }
     return true;
   });
+  if(state.sort==="near") list=list.slice().sort(function(a,b){return travel(state.start,a.region)-travel(state.start,b.region);});
   $("count").textContent=list.length+"곳을 찾았어요";
   if(!list.length){
     $("grid").innerHTML='<div class="empty"><h3>조건에 맞는 곳이 아직 없어요</h3><p>종류나 지역을 바꿔 보세요.</p><p style="margin-top:12px"><button class="btn btn-sub" type="button" id="resetBtn">조건 지우기</button></p></div>';
@@ -35,6 +42,7 @@ function renderGrid(){
       '<div class="thumb" style="--c:'+c.color+'">'+thumbImg(s)+'</div>'+
       '<div class="card-body"><div class="tagline"><span class="pill" style="--c:'+c.color+'">'+c.name+'</span><span class="pill region">'+REGIONS[s.region].name+'</span>'+(s.book?'<span class="pill region">예약 필요</span>':'')+'</div>'+
       '<h3>'+esc(s.name)+'</h3><p>'+esc(s.short)+'</p>'+withPills(s)+
+      '<p class="from">'+esc(placeName(state.start))+'에서 '+moveText(state.start,s.region)+'</p>'+
       '<div class="meta"><span>약 '+fmt(s.dur)+'</span><span>'+esc(s.price)+'</span></div></div></button>';
   }).join("");
 }
@@ -56,7 +64,8 @@ function openDetail(id){
     '<div><dt>걸리는 시간</dt><dd>약 '+fmt(s.dur)+'</dd></div>'+
     '<div><dt>가격</dt><dd>'+esc(s.price)+'</dd></div>'+
     '<div><dt>여는 시간</dt><dd>'+esc(s.hours)+'</dd></div>'+
-    '<div><dt>강릉역에서</dt><dd>'+esc(s.station||moveText("station",s.region))+'</dd></div>'+
+    (state.start==="station"&&s.station?'<div><dt>강릉역에서</dt><dd>'+esc(s.station)+'</dd></div>':
+      '<div><dt>'+esc(placeName(state.start))+'에서</dt><dd>'+moveText(state.start,s.region)+' ('+kmText(state.start,s.region)+', 어림)</dd></div>')+
     '<div style="grid-column:1/-1"><dt>주소</dt><dd>'+esc(s.addr)+'</dd></div>'+
     '<div style="grid-column:1/-1"><dt>함께 가기</dt><dd>'+esc(s.acc)+'</dd>'+withPills(s)+'</div></dl>'+
     '<a class="btn btn-main map-btn" href="'+mapUrl(s)+'" target="_blank" rel="noopener">네이버 지도에서 보기</a>'+

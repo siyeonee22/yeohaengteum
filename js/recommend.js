@@ -13,6 +13,7 @@ function parseQuery(q){
   if(!min&&/반나절/.test(q)) min=240;
   var region=null;
   Object.keys(REGIONS).forEach(function(k){REGIONS[k].kw.forEach(function(w){if(!region&&q.indexOf(w)>=0) region=k;});});
+  if(!region) Object.keys(STARTS).forEach(function(k){STARTS[k].kw.forEach(function(w){if(!region&&q.indexOf(w)>=0) region=k;});});
   var cats=[];
   Object.keys(CAT_KW).forEach(function(k){if(CAT_KW[k].some(function(w){return q.indexOf(w)>=0;})) cats.push(k);});
   var withs=[];
@@ -76,6 +77,7 @@ function askAI(q){
   var timer=setTimeout(function(){if(ctrl) ctrl.abort();},20000); // 20초 안에 답이 없으면 포기
   var regions={},cats={};
   Object.keys(REGIONS).forEach(function(k){regions[k]=REGIONS[k].name;});
+  Object.keys(STARTS).forEach(function(k){regions[k]=STARTS[k].name;});
   Object.keys(CATS).forEach(function(k){cats[k]=CATS[k].name;});
   var places=SHOPS.map(function(s){
     return {id:s.id,n:s.name,c:s.cat,r:s.region,d:s.dur,h:s.hours,s:s.short,t:s.tags.join(","),
@@ -94,18 +96,18 @@ function render(q,ai,warn){
   var p=parseQuery(q), notes=[], prefer={}, reasons={};
   if(ai){ // AI가 알아들은 내용을 규칙보다 먼저 써요
     if(ai.minutes) p.min=ai.minutes;
-    if(ai.start&&REGIONS[ai.start]) p.region=ai.start;
+    if(ai.start&&(REGIONS[ai.start]||STARTS[ai.start])) p.region=ai.start;
     (ai.withs||[]).forEach(function(w){if(WITH[w]&&p.withs.indexOf(w)<0) p.withs.push(w);}); // 동행 조건은 둘 중 하나라도 찾으면 적용
     if(ai.cats&&ai.cats.length) p.cats=ai.cats.filter(function(c){return CATS[c];});
     (ai.picks||[]).forEach(function(id,i){prefer[id]=i;});
     reasons=ai.reasons||{};
   }
-  var start=p.region||"station", budget=p.min||120, mode=tripMode(p.withs);
+  var start=p.region||(typeof state!=="undefined"?state.start:"station"), budget=p.min||120, mode=tripMode(p.withs);
   if(warn) notes.push(warn);
   if(!p.min) notes.push("남은 시간을 못 찾아서 2시간으로 잡았어요.");
-  if(!p.region) notes.push("위치를 못 찾아서 강릉역에서 출발하는 걸로 잡았어요.");
+  if(!p.region) notes.push("위치를 못 찾아서 "+placeName(start)+"에서 출발하는 걸로 잡았어요. (아래 목록의 출발지에서 바꿀 수 있어요)");
   var pool=SHOPS.filter(function(s){return p.withs.every(function(w){return s[w];});});
-  var plan=buildPlan(start,budget,p.cats,pool,mode,prefer), R=REGIONS[start].name, html;
+  var plan=buildPlan(start,budget,p.cats,pool,mode,prefer), R=placeName(start), html;
   var who=p.withs.map(function(w){return WITH[w].replace(" 가능","로");}).join(", ");
   function stopBtn(s,extra){return '<button class="stop" type="button" data-id="'+s.id+'"><b>'+esc(s.name)+'</b><small>'+CATS[s.cat].name+' · '+REGIONS[s.region].name+extra+(s.book?' · 예약 필요':'')+' · '+esc(s.short)+(p.withs.length?'<br>'+esc(s.acc):'')+'</small>'+(reasons[s.id]?'<span class="why">'+esc(reasons[s.id])+'</span>':'')+'</button>';}
   if(!pool.length){
